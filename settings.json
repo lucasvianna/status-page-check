@@ -1,7 +1,12 @@
 {
-    "pages": 
-        {
-            "gcp": "https://status.cloud.google.com/en/feed.atom",
-            "github": "https://www.githubstatus.com/history.atom"
+    "pages": {
+        "gcp": {
+            "url": "https://status.cloud.google.com",
+            "enable": true
+        },
+        "github": {
+            "url": "https://www.githubstatus.com",
+            "enable": true
         }
+    }
 }
