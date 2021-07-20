@@ -24,7 +24,6 @@ def main():
             module = importlib.import_module(module_name)
             service_status[page] = module.status(page_url)
 
-    # print(service_status)
     print(json.dumps(service_status, indent=4, sort_keys=True))
 
 
