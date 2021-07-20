@@ -7,6 +7,14 @@
         "github": {
             "url": "https://www.githubstatus.com",
             "enable": true
+        },
+        "codefresh": {
+            "url": "https://status.codefresh.io",
+            "enable": false
+        },
+        "aws": {
+            "url": "https: //status.aws.amazon.com",
+            "enable": false
         }
     }
 }
