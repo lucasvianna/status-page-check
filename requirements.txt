@@ -2,3 +2,4 @@ bs4==0.0.1
 requests==2.25.1
 pyyaml
 termcolor
+Flask
