@@ -1,0 +1,24 @@
+pages:
+  gcp:
+    url: https://status.cloud.google.com
+    enable: true
+  github:
+    url: https://www.githubstatus.com
+    enable: true
+  codefresh:
+    url: https://status.codefresh.io
+    enable: true
+  aws:
+    url: https://status.aws.amazon.com
+    enable: false
+  nearmap:
+    url: https://status.nearmap.com/
+    enable: true
+status_color:
+  green:
+    - "available"
+    - "operational"
+  yeallow:
+    - "no operational"
+  red:
+    - "something"

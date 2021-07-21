@@ -1,0 +1,3 @@
+"""
+Codefresh status page
+"""
