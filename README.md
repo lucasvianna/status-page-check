@@ -1,11 +1,9 @@
 # Status Page Checker
 
+
+## Usage
 ```
 python3 status-page-check.py
-```
-or
-```
-docker build . -t status-page-check
 docker run status-page-check
 ```
 
@@ -13,4 +11,9 @@ docker run status-page-check
 ```
 python3 status-page-check --failed
 docker run status-page-check --failed
+```
+## Build
+
+```
+docker build . -t status-page-check
 ```
