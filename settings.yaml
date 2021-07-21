@@ -19,14 +19,23 @@ pages:
     url: https://www.cloudflarestatus.com/
     json_url: https://www.cloudflarestatus.com/?format=json
     enable: true
-status_color:
-  default: red
-  green:
+
+status:
+  ok:
     - "available"
     - "operational"
     - "service is operating normally"
-  red:
+  warn:
+    - "service degradation"
+    - "partial outage"
+    - "under maintenance"
+  error:
     - "no operational"
     - "service disruption"
-  yellow:
-    - "service degradation"
+
+status_color:
+  default: yellow
+  ok: green
+  warn: yellow
+  error: red  
+  

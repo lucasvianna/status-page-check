@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def status(url):
+async def status(url):
     code = requests.get(url)
     page = BeautifulSoup(code.text, "html.parser")
     service_status = {}
