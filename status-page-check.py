@@ -18,7 +18,7 @@ def load_config():
 
 
 def find_color(status):
-    default_color = "white"
+    default_color = settings["status_color"]["default"]
     colors = {x.lower(): k for k,
               v in settings["status_color"].items() for x in v}
 
@@ -27,10 +27,11 @@ def find_color(status):
 
 
 def print_results(page, services):
-    print(colored(page.upper(), "blue"))
+    print(f'\n{colored(page.upper(), "blue")}')
     for svc, svc_status in services.items():
         color = find_color(svc_status.lower())
-        print(colored(svc, 'white'), colored(svc_status, color))
+        print(colored(svc, 'white').ljust(80),
+              colored(svc_status, color))
 
 
 def main():
@@ -38,13 +39,14 @@ def main():
     service_status = {}
     for page in settings["pages"]:
         if settings["pages"][page]["enable"]:
-            page_url = settings["pages"][page]["url"]
-            module_name = "statuspage." + page + ".status"
-            module = importlib.import_module(module_name)
-            service_status[page] = module.status(page_url)
-            print_results(page, service_status[page])
-
-    # print(json.dumps(service_status, indent=4, sort_keys=True))
+            try:
+                page_url = settings["pages"][page]["url"]
+                module_name = "statuspage." + page + ".status"
+                module = importlib.import_module(module_name)
+                service_status[page] = module.status(page_url)
+                print_results(page, service_status[page])
+            except:
+                print(f"Unable to import {module_name}")
 
 
 if __name__ == "__main__":

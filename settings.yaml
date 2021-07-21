@@ -4,21 +4,29 @@ pages:
     enable: true
   github:
     url: https://www.githubstatus.com
+    json_url: https://www.githubstatus.com/?format=json
     enable: true
   codefresh:
     url: https://status.codefresh.io
     enable: true
   aws:
     url: https://status.aws.amazon.com
-    enable: false
+    enable: true
   nearmap:
     url: https://status.nearmap.com/
     enable: true
+  cloudflare:
+    url: https://www.cloudflarestatus.com/
+    json_url: https://www.cloudflarestatus.com/?format=json
+    enable: true
 status_color:
+  default: red
   green:
     - "available"
     - "operational"
-  yeallow:
-    - "no operational"
+    - "service is operating normally"
   red:
-    - "something"
+    - "no operational"
+    - "service disruption"
+  yellow:
+    - "service degradation"
