@@ -8,5 +8,7 @@ RUN pip3 install --upgrade pip
 COPY . ./
 
 RUN pip3 install -r requirements.txt
+EXPOSE 5000
 
-ENTRYPOINT ["python3","status-page-check.py"]
+# ENTRYPOINT ["python3","status-page-check.py"]
+# ENTRYPOINT ["bash","scripts/server.sh"]
