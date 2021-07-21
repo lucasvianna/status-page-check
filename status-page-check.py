@@ -70,7 +70,7 @@ def print_results(results):
                     80), colored(svc_status, color))
 
 
-async def main():
+async def read_pages():
     global service_status
     for page in settings["pages"]:
         if settings["pages"][page]["enable"]:
@@ -87,5 +87,5 @@ async def main():
 if __name__ == "__main__":
     set_options()
     load_config()
-    asyncio.run(main())
+    asyncio.run(read_pages())
     print_results(service_status)
