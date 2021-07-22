@@ -11,4 +11,5 @@ def index():
     return(results)
 
 if __name__ == "__main__":
-    app.run(host=serverconfig.serverSettings, debug=True, port=5000)
+    config = serverconfig.serverSettings()
+    app.run(host=config["server_binding"], debug=config["debug_mode"], port=5000)
