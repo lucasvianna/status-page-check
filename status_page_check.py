@@ -60,10 +60,20 @@ def find_color(status):
 
 def process_results():
     # {"page": {ok: 10, error: 2, warn: 1, services: {svc_name: name, svc_status: status}}}
-    global service_status
+    global service_status, show_failed_services, filtered_page, search_filter
+    results = service_status
+
+    if show_failed_services:
+        results = dict(filter(
+            lambda elem: elem[1]["warn"] > 0 or elem[1]["error"] > 0, results.items()))
+
+    if filtered_page:
+        results = dict(
+            filter(lambda elem: elem[0].upper() == filtered_page.upper(), results.items()))
+
     compiled_svc_status = {}
 
-    for page, svc_statuses in service_status.items():
+    for page, svc_statuses in results.items():
         compiled_svc_status[page] = {"error": 0, "warn": 0, "ok": 0}
         for svc, svc_status in svc_statuses.items():
             if svc_status.lower() in settings["status"]["ok"]:
@@ -161,18 +171,16 @@ def main():
     print_results(results)
 
 
-def web_version(page=None):
-    global filtered_page
+def web_version(page=None, search_svc_filter=None, show_failed_only=False,):
+    global filtered_page, show_failed_services
     filtered_page = page
-    # show_failed_services = False
-    # show_summary = False
-    # search_filter = None
+    show_failed_services = show_failed_only
+    search_filter = search_svc_filter
 
     load_config()
     asyncio.run(read_pages())
     results = process_results()
-    # return json.dumps(results, indent=4, sort_keys=True)
-    return(print_results())
+    return(json.dumps(results, indent=4, sort_keys=True))
 
 
 if __name__ == "__main__":
