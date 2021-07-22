@@ -2,4 +2,4 @@
 
 FLASK_APP=server
 
-python3 ../web-server/server.py
+python3 web-server/server.py
