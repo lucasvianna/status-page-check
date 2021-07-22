@@ -1,4 +1,5 @@
 from flask import Flask
+from flask import request
 import subprocess
 import serverconfig
 import status_page_check as sp
@@ -8,6 +9,13 @@ app = Flask(__name__)
 @app.route("/")
 def index():
     results = sp.web_version()
+    return(results)
+
+@app.route("/page")
+def filtered_results():
+    page_name = request.args.get('page')
+
+    results = sp.web_version(page_name)
     return(results)
 
 if __name__ == "__main__":

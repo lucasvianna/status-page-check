@@ -161,11 +161,18 @@ def main():
     print_results(results)
 
 
-def web_version():
+def web_version(page=None):
+    global filtered_page
+    filtered_page = page
+    # show_failed_services = False
+    # show_summary = False
+    # search_filter = None
+
     load_config()
     asyncio.run(read_pages())
     results = process_results()
-    return json.dumps(results, indent=4, sort_keys=True)
+    # return json.dumps(results, indent=4, sort_keys=True)
+    return(print_results())
 
 
 if __name__ == "__main__":
