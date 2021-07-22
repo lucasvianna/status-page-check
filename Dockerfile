@@ -2,11 +2,13 @@ FROM alpine:3.14
 
 RUN apk update && apk add --no-cache python3 py3-pip python3-dev \
   bash build-base
-RUN pip3 install --upgrade pip 
 
-COPY . ./
+COPY requirements.txt ./requirements.txt
+RUN pip3 install --upgrade pip 
 RUN pip3 install -r requirements.txt
 
-EXPOSE 5000
+COPY . ./
 
-CMD ["bash","scripts/server.sh"]
+EXPOSE 5000
+# ENTRYPOINT ["python3","status-page-check.py"]
+CMD ["bash","server.sh"]
