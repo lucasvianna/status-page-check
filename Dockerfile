@@ -11,4 +11,4 @@ COPY . ./
 
 EXPOSE 5000
 # ENTRYPOINT ["python3","status-page-check.py"]
-CMD ["bash","scripts/server.sh"]
+CMD ["bash","server.sh"]
