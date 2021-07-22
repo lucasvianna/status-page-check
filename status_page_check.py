@@ -132,7 +132,6 @@ def print_list(results, failed_only=False, filtered_page=None, search_filter=Non
 def print_results(results):
     global show_failed_services, show_summary, filtered_page, search_filter
 
-    print(show_failed_services, show_summary, filtered_page)
     if show_summary:
         print_summary(results, failed_only=show_failed_services,
                       filtered_page=filtered_page)
@@ -156,10 +155,21 @@ async def read_pages():
                 print(f"Unable to import {module_name}", e)
 
 
-if __name__ == "__main__":
-    set_options()
-    load_config()
+def main():
     asyncio.run(read_pages())
     results = process_results()
     print_results(results)
+
+
+def web_version():
+    load_config()
+    asyncio.run(read_pages())
+    results = process_results()
+    return json.dumps(results, indent=4, sort_keys=True)
+
+
+if __name__ == "__main__":
+    set_options()
+    load_config()
+    main()
     # print(json.dumps(results, indent=4, sort_keys=True))
