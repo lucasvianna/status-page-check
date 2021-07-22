@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    foo = subprocess.call("python3 status-page-check.py", shell=True)
+    foo = subprocess.getoutput("python3 status_page_check.py --failed")
     return(foo)
 
 if __name__ == "__main__":
