@@ -9,12 +9,6 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    results = sp.web_version()
-    return(results)
-
-
-@app.route("/page")
-def filtered_results():
     page_name = request.args.get('page')
     search_svc_filter = request.args.get('filter')
     show_failed_only = request.args.get('failed_only')
