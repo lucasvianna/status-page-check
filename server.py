@@ -19,7 +19,8 @@ def filtered_results():
     search_svc_filter = request.args.get('filter')
     show_failed_only = request.args.get('failed_only')
 
-    results = sp.web_version(page_name)
+    results = sp.web_version(
+        page=page_name, search_svc_filter=search_svc_filter, show_failed_only=show_failed_only)
     return(results)
 
 
