@@ -11,7 +11,7 @@ pages:
     enable: true
   aws:
     url: https://status.aws.amazon.com
-    enable: false
+    enable: true
   nearmap:
     url: https://status.nearmap.com/
     enable: true
