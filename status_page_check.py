@@ -60,10 +60,16 @@ def find_color(status):
 
 def process_results():
     # {"page": {ok: 10, error: 2, warn: 1, services: {svc_name: name, svc_status: status}}}
-    global service_status
+    global service_status, show_failed_services, filtered_page, search_filter
+    results = service_status
+
+    if filtered_page:
+        results = dict(
+            filter(lambda elem: elem[0].upper() == filtered_page.upper(), results.items()))
+
     compiled_svc_status = {}
 
-    for page, svc_statuses in service_status.items():
+    for page, svc_statuses in results.items():
         compiled_svc_status[page] = {"error": 0, "warn": 0, "ok": 0}
         for svc, svc_status in svc_statuses.items():
             if svc_status.lower() in settings["status"]["ok"]:
@@ -72,16 +78,26 @@ def process_results():
                 compiled_svc_status[page]["warn"] += 1
             if svc_status.lower() in settings["status"]["error"]:
                 compiled_svc_status[page]["error"] += 1
+
+        if search_filter:
+            svc_statuses = dict(filter(
+                lambda elem: search_filter.lower() in elem[0].lower(), svc_statuses.items()))
+
+        if show_failed_services:
+            svc_statuses = dict(filter(
+                lambda elem: elem[1].lower() not in settings["status"]["ok"], svc_statuses.items()))
+
         compiled_svc_status[page]["services"] = svc_statuses
+
+    if show_failed_services:
+        compiled_svc_status = dict(filter(
+            lambda elem: elem[1]["warn"] > 0 or elem[1]["error"] > 0, compiled_svc_status.items()))
+
     return compiled_svc_status
 
 
 def print_summary(results, failed_only=False, filtered_page=None):
     print("\nSummary:")
-
-    if failed_only:
-        results = dict(filter(
-            lambda elem: elem[1]["warn"] > 0 or elem[1]["error"] > 0, results.items()))
 
     for page, svc_data in results.items():
         if filtered_page != None and page.upper() != filtered_page.upper():
@@ -101,27 +117,11 @@ def print_summary_table(page, svc_ok, svc_warn, svc_error):
                   settings["status_color"]["error"]))
 
 
-def print_list(results, failed_only=False, filtered_page=None, search_filter=None):
-    if failed_only:
-        # filtes pages with failed services
-        results = dict(filter(
-            lambda elem: elem[1]["warn"] > 0 or elem[1]["error"] > 0, results.items()))
-    if filtered_page:
-        results = dict(
-            filter(lambda elem: elem[0].upper() == filtered_page.upper(), results.items()))
-
+def print_list(results):
+    print(json.dumps(results, indent=4, sort_keys=True))
     for page, svc_data in results.items():
         print(f'\n{colored(page.upper(), "blue")}')
         services_statuses = svc_data["services"]
-
-        # filter services that failed
-        if failed_only:
-            services_statuses = dict(filter(
-                lambda elem: elem[1].lower() not in settings["status"]["ok"], services_statuses.items()))
-
-        if search_filter:
-            services_statuses = dict(filter(
-                lambda elem: search_filter.lower() in elem[0].lower(), services_statuses.items()))
 
         for svc_name, svc_status in services_statuses.items():
             color = find_color(svc_status.lower())
@@ -130,15 +130,12 @@ def print_list(results, failed_only=False, filtered_page=None, search_filter=Non
 
 
 def print_results(results):
-    global show_failed_services, show_summary, filtered_page, search_filter
+    global show_summary
 
     if show_summary:
-        print_summary(results, failed_only=show_failed_services,
-                      filtered_page=filtered_page)
-
+        print_summary(results)
     else:
-        print_list(results, failed_only=show_failed_services, filtered_page=filtered_page,
-                   search_filter=search_filter)
+        print_list(results)
 
 
 async def read_pages():
@@ -149,7 +146,6 @@ async def read_pages():
                 page_url = settings["pages"][page]["url"]
                 module_name = "statuspage." + page + ".status"
                 module = importlib.import_module(module_name)
-                print(f"Checking {page.upper()}...")
                 service_status[page] = await module.status(page_url)
             except Exception as e:
                 print(f"Unable to import {module_name}", e)
@@ -161,11 +157,16 @@ def main():
     print_results(results)
 
 
-def web_version():
+def web_version(page=None, search_svc_filter=None, show_failed_only=False):
+    global filtered_page, show_failed_services, search_filter
+    filtered_page = page
+    show_failed_services = show_failed_only
+    search_filter = search_svc_filter
+
     load_config()
     asyncio.run(read_pages())
     results = process_results()
-    return json.dumps(results, indent=4, sort_keys=True)
+    return(json.dumps(results, indent=4, sort_keys=True))
 
 
 if __name__ == "__main__":

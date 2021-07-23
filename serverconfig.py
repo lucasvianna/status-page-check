@@ -1,5 +1,6 @@
 import os
 
+
 def serverSettings():
 
     if (os.getenv("ENVIRONMENT") is None):
@@ -13,4 +14,3 @@ def serverSettings():
         server_config = {'server_binding': '127.0.0.1', 'debug_mode': True}
 
     return server_config
-
