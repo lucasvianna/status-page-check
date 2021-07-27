@@ -59,7 +59,7 @@ def find_color(status):
 
 
 def process_results():
-    # {"page": {ok: 10, error: 2, warn: 1, services: {svc_name: name, svc_status: status}}}
+    # {"page": {success: 10, error: 2, warning: 1, services: {svc_name: name, svc_status: status}}}
     global service_status, show_failed_services, filtered_page, search_filter
     results = service_status
 
@@ -70,12 +70,12 @@ def process_results():
     compiled_svc_status = {}
 
     for page, svc_statuses in results.items():
-        compiled_svc_status[page] = {"error": 0, "warn": 0, "ok": 0}
+        compiled_svc_status[page] = {"error": 0, "warning": 0, "success": 0}
         for svc, svc_status in svc_statuses.items():
-            if svc_status.lower() in settings["status"]["ok"]:
-                compiled_svc_status[page]["ok"] += 1
-            if svc_status.lower() in settings["status"]["warn"]:
-                compiled_svc_status[page]["warn"] += 1
+            if svc_status.lower() in settings["status"]["success"]:
+                compiled_svc_status[page]["success"] += 1
+            if svc_status.lower() in settings["status"]["warning"]:
+                compiled_svc_status[page]["warning"] += 1
             if svc_status.lower() in settings["status"]["error"]:
                 compiled_svc_status[page]["error"] += 1
 
@@ -85,13 +85,13 @@ def process_results():
 
         if show_failed_services:
             svc_statuses = dict(filter(
-                lambda elem: elem[1].lower() not in settings["status"]["ok"], svc_statuses.items()))
+                lambda elem: elem[1].lower() not in settings["status"]["success"], svc_statuses.items()))
 
         compiled_svc_status[page]["services"] = svc_statuses
 
     if show_failed_services:
         compiled_svc_status = dict(filter(
-            lambda elem: elem[1]["warn"] > 0 or elem[1]["error"] > 0, compiled_svc_status.items()))
+            lambda elem: elem[1]["warning"] > 0 or elem[1]["error"] > 0, compiled_svc_status.items()))
 
     return compiled_svc_status
 
@@ -104,15 +104,15 @@ def print_summary(results, failed_only=False, filtered_page=None):
             continue
 
         print_summary_table(
-            page.upper(), svc_data["ok"], svc_data["warn"], svc_data["error"])
+            page.upper(), svc_data["success"], svc_data["warning"], svc_data["error"])
 
 
-def print_summary_table(page, svc_ok, svc_warn, svc_error):
+def print_summary_table(page, svc_success, svc_warning, svc_error):
     print(colored(page.upper(), 'white').ljust(20),
-          colored(svc_ok,
-                  settings["status_color"]["ok"]).ljust(20),
-          colored(svc_warn,
-                  settings["status_color"]["warn"]).ljust(20),
+          colored(svc_success,
+                  settings["status_color"]["success"]).ljust(20),
+          colored(svc_warning,
+                  settings["status_color"]["warning"]).ljust(20),
           colored(svc_error,
                   settings["status_color"]["error"]))
 
@@ -166,7 +166,8 @@ def web_version(page=None, search_svc_filter=None, show_failed_only=False):
     load_config()
     asyncio.run(read_pages())
     results = process_results()
-    return(json.dumps(results, indent=4, sort_keys=True))
+    # return(json.dumps(results, indent=4, sort_keys=True))
+    return results
 
 
 if __name__ == "__main__":

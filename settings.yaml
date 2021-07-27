@@ -21,11 +21,11 @@ pages:
     enable: true
 
 status:
-  ok:
+  success:
     - "available"
     - "operational"
     - "service is operating normally"
-  warn:
+  warning:
     - "service degradation"
     - "partial outage"
     - "under maintenance"
