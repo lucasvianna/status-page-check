@@ -5,7 +5,7 @@ import json
 import sys
 import yaml
 import redis
-from os import path
+from os import path, environ
 from termcolor import colored
 
 CONFIG_FILE = "./settings.yaml"
@@ -15,7 +15,9 @@ show_failed_services = False
 show_summary = False
 filtered_page = None  # filtered page
 search_filter = None
-redis_conn = redis.Redis(host='redis')
+
+redis_host = environ.get("REDIS_HOST") or "localhost"
+redis_conn = redis.Redis(host=redis_host)
 
 
 def cache_exists():
