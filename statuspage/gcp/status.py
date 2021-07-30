@@ -9,7 +9,15 @@ async def status(url):
 
     for link in page.findAll('tr'):
         service_name = link.find('td', {'class': 'product-name'})
-        status_msg = link.find('a', {'class': 'status-icon'})
+        product_days = link.findAll(
+            'td', {'class': 'product-day'})
+
+        if not product_days:
+            continue
+
+        status_msg = product_days[-1].find(
+            'a', {'class': 'status-icon'})
+
         if service_name and status_msg:
             service_status[service_name.string.strip()] = status_msg.get("class")[
                 1]

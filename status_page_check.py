@@ -136,7 +136,7 @@ def print_summary_table(page, svc_success, svc_warning, svc_error):
 
 
 def print_list(results):
-    print(json.dumps(results, indent=4, sort_keys=True))
+    # print(json.dumps(results, indent=4, sort_keys=True))
     for page, svc_data in results.items():
         print(f'\n{colored(page.upper(), "blue")}')
         services_statuses = svc_data["services"]
@@ -158,6 +158,7 @@ def print_results(results):
 
 async def read_pages():
     global service_status
+
     if cache_exists():
         service_status = read_from_cache()
     else:
