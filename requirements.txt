@@ -4,3 +4,4 @@ pyyaml
 termcolor
 Flask
 nose
+redis

@@ -29,6 +29,7 @@ status:
     - "service degradation"
     - "partial outage"
     - "under maintenance"
+    - "disruption"
   error:
     - "no operational"
     - "service disruption"

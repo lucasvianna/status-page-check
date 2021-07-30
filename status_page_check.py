@@ -4,6 +4,7 @@ import importlib
 import json
 import sys
 import yaml
+import redis
 from os import path
 from termcolor import colored
 
@@ -14,6 +15,21 @@ show_failed_services = False
 show_summary = False
 filtered_page = None  # filtered page
 search_filter = None
+redis_conn = redis.Redis(host='redis')
+
+
+def cache_exists():
+    return redis_conn.exists("status_page_status")
+
+
+def read_from_cache():
+    return json.loads(redis_conn.get("status_page_status"))
+
+
+def write_cache():
+    global service_status
+    redis_conn.set("status_page_status", json.dumps(service_status))
+    redis_conn.expire("status_page_status", 600)
 
 
 def load_config():
@@ -140,15 +156,19 @@ def print_results(results):
 
 async def read_pages():
     global service_status
-    for page in settings["pages"]:
-        if settings["pages"][page]["enable"]:
-            try:
-                page_url = settings["pages"][page]["url"]
-                module_name = "statuspage." + page + ".status"
-                module = importlib.import_module(module_name)
-                service_status[page] = await module.status(page_url)
-            except Exception as e:
-                print(f"Unable to import {module_name}", e)
+    if cache_exists():
+        service_status = read_from_cache()
+    else:
+        for page in settings["pages"]:
+            if settings["pages"][page]["enable"]:
+                try:
+                    page_url = settings["pages"][page]["url"]
+                    module_name = "statuspage." + page + ".status"
+                    module = importlib.import_module(module_name)
+                    service_status[page] = await module.status(page_url)
+                except Exception as e:
+                    print(f"Unable to import {module_name}", e)
+        write_cache()
 
 
 def main():
