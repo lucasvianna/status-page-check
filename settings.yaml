@@ -11,17 +11,17 @@ pages:
     enable: true
   codefresh:
     url: https://status.codefresh.io
-    enable: false
+    enable: true
   aws:
     url: https://status.aws.amazon.com
-    enable: false
+    enable: true
   nearmap:
     url: https://status.nearmap.com/
-    enable: false
+    enable: true
   cloudflare:
     url: https://www.cloudflarestatus.com/
     json_url: https://www.cloudflarestatus.com/?format=json
-    enable: false
+    enable: true
 
 status:
   success:
