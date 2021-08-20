@@ -1,24 +1,27 @@
 pages:
   gcp:
     url: https://status.cloud.google.com
+    enable: false
+  newrelic:
+    url: https://status.newrelic.com/?format=json
     enable: true
   github:
     url: https://www.githubstatus.com
     json_url: https://www.githubstatus.com/?format=json
-    enable: true
+    enable: false
   codefresh:
     url: https://status.codefresh.io
-    enable: true
+    enable: false
   aws:
     url: https://status.aws.amazon.com
-    enable: true
+    enable: false
   nearmap:
     url: https://status.nearmap.com/
-    enable: true
+    enable: false
   cloudflare:
     url: https://www.cloudflarestatus.com/
     json_url: https://www.cloudflarestatus.com/?format=json
-    enable: true
+    enable: false
 
 status:
   success:
