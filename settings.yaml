@@ -8,7 +8,7 @@ pages:
   github:
     url: https://www.githubstatus.com
     json_url: https://www.githubstatus.com/?format=json
-    enable: false
+    enable: true
   codefresh:
     url: https://status.codefresh.io
     enable: false
