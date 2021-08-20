@@ -1,7 +1,7 @@
 pages:
   gcp:
     url: https://status.cloud.google.com
-    enable: false
+    enable: true
   newrelic:
     url: https://status.newrelic.com/?format=json
     enable: true
